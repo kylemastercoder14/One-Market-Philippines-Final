@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import BusinessType, { RadioGroup } from "./business-type";
 import { CheckIcon, ExternalLink } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -159,7 +159,7 @@ const OnboardingForm = ({ categories }: { categories: SellerCategory[] }) => {
   };
 
   return (
-    <>
+    <Suspense fallback={null}>
       <AlertModal
         isOpen={cancelModal}
         onClose={() => setCancelModal(false)}
@@ -1054,7 +1054,7 @@ const OnboardingForm = ({ categories }: { categories: SellerCategory[] }) => {
           </div>
         </form>
       </Form>
-    </>
+    </Suspense>
   );
 };
 
