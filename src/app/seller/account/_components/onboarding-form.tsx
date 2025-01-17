@@ -89,7 +89,11 @@ const formSchema = z
     }
   });
 
-const OnboardingForm = ({ categories }: { categories: SellerCategory[] }) => {
+const OnboardingComponent = ({
+  categories,
+}: {
+  categories: SellerCategory[];
+}) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -159,7 +163,7 @@ const OnboardingForm = ({ categories }: { categories: SellerCategory[] }) => {
   };
 
   return (
-    <Suspense fallback={null}>
+    <>
       <AlertModal
         isOpen={cancelModal}
         onClose={() => setCancelModal(false)}
@@ -1054,6 +1058,14 @@ const OnboardingForm = ({ categories }: { categories: SellerCategory[] }) => {
           </div>
         </form>
       </Form>
+    </>
+  );
+};
+
+const OnboardingForm = ({ categories }: { categories: SellerCategory[] }) => {
+  return (
+    <Suspense fallback={null}>
+      <OnboardingComponent categories={categories} />
     </Suspense>
   );
 };
