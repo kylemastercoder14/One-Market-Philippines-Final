@@ -32,7 +32,7 @@ export function NavUser({ user }: { user: Seller }) {
     try {
       await logoutAdmin();
       toast.success("Logged out successfully");
-      router.push("/admin");
+      router.push("/seller/account/login");
     } catch (error) {
       console.error(error);
     }

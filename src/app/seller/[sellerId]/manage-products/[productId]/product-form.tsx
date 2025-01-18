@@ -479,7 +479,7 @@ const ProductForm = ({
                       />
                     </FormControl>
                     <FormDescription>
-                      Upload 1 to 7 images in .png, .jpg, .jpeg format with a
+                      Upload 1 to 7 images in .png, .jpg, .jpeg, .webp format with a
                       resolution of at least 100*100 px. The file must not be
                       bigger than 5 MB and the aspect ratio should be 1:1.
                     </FormDescription>

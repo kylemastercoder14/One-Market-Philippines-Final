@@ -211,6 +211,7 @@ export const finishingSellerData = async (
         bir: data.bir,
         sec: data.sec,
         givenName: data.givenName,
+        barangayBusinessPermit: data.barangayBusinessPermit,
         middleName: data.middleName,
         familyName: data.familyName,
         identity: data.identity,
