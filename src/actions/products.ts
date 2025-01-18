@@ -46,10 +46,12 @@ const formSchema = z.object({
   variations: z
     .array(
       z.object({
+        id: z.string().optional(),
         name: z.string().optional(),
         options: z
           .array(
             z.object({
+              id: z.string().optional(),
               name: z.string().min(1, { message: "Option name is required" }),
               price: z.coerce
                 .number()
@@ -139,6 +141,141 @@ export const createProduct = async (
     return { success: "Product created successfully" };
   } catch (error: any) {
     console.error("Error creating product:", error.message, error.stack);
+    return {
+      error: error instanceof Error ? error.message : "Unknown error occurred",
+    };
+  }
+};
+
+export const updateProduct = async (
+  values: z.infer<typeof formSchema>,
+  productId: string,
+  sellerId: string
+) => {
+  try {
+    console.log("Input Values:", values);
+
+    // Validate input
+    const validatedData = formSchema.parse(values);
+    console.log("Validated Data:", validatedData);
+
+    // Check if a product with the same name exists
+    const existingProduct = await db.sellerProduct.findFirst({
+      where: { name: validatedData.title, sellerId },
+    });
+
+    if (existingProduct && existingProduct.id !== productId) {
+      return { error: "Product with this name already exists" };
+    }
+
+    // Check if the product exists
+    const productExists = await db.sellerProduct.findUnique({
+      where: { id: productId },
+    });
+
+    if (!productExists) {
+      return { error: "Product not found" };
+    }
+
+    // Prepare product data
+    const productData = {
+      name: validatedData.title,
+      description: validatedData.description,
+      tags: validatedData.tags,
+      category: validatedData.category,
+      discount: validatedData.discount || 0,
+      warrantyPeriod: validatedData.warrantyPeriod || "",
+      warrantyPolicy: validatedData.warrantyPolicy || "",
+      images: (validatedData.media || []).filter(
+        (item): item is string => typeof item === "string"
+      ),
+      brand: validatedData.brand || "",
+      materials: validatedData.materials,
+      height: validatedData.height || 0,
+      weight: validatedData.weight || 0,
+      sku: validatedData.sku,
+    };
+
+    console.log("Product Data:", productData);
+
+    // Update product
+    await db.sellerProduct.update({
+      where: { id: productId },
+      data: productData,
+    });
+
+    // Handle variations
+    if (validatedData.variations) {
+      for (const variation of validatedData.variations) {
+        let variant;
+
+        if (variation.id) {
+          variant = await db.sellerProductVariants.findUnique({
+            where: { id: variation.id },
+          });
+
+          if (variant) {
+            await db.sellerProductVariants.update({
+              where: { id: variation.id },
+              data: {
+                name: variation.name || "",
+              },
+            });
+          } else {
+            variant = await db.sellerProductVariants.create({
+              data: {
+                name: variation.name || "",
+                sellerProductId: productId,
+              },
+            });
+          }
+        } else {
+          variant = await db.sellerProductVariants.create({
+            data: {
+              name: variation.name || "",
+              sellerProductId: productId,
+            },
+          });
+        }
+
+        if (variation.options) {
+          for (const option of variation.options) {
+            if (option.id) {
+              const optionExists =
+                await db.sellerProductVariantsOptions.findUnique({
+                  where: { id: option.id },
+                });
+
+              if (optionExists) {
+                await db.sellerProductVariantsOptions.update({
+                  where: { id: option.id },
+                  data: {
+                    name: option.name,
+                    price: option.price,
+                    stock: option.stock,
+                  },
+                });
+              } else {
+                console.error(`Option not found for id: ${option.id}`);
+              }
+            } else {
+              await db.sellerProductVariantsOptions.create({
+                data: {
+                  name: option.name,
+                  price: option.price,
+                  stock: option.stock,
+                  sellerProductVariantsId: variant.id,
+                },
+              });
+            }
+          }
+        }
+      }
+    }
+
+    return { success: "Product updated successfully" };
+  } catch (error: any) {
+    console.error("Error updating product:", error.message, error.stack);
     return {
       error: error instanceof Error ? error.message : "Unknown error occurred",
     };

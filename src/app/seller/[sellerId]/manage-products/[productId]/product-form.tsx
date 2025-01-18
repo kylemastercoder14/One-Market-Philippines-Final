@@ -42,7 +42,42 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { createProduct } from "@/actions/products";
+import { createProduct, updateProduct } from "@/actions/products";
+
+interface SellerProductVariantOption {
+  id: string;
+  name: string;
+  price: number;
+  stock: number;
+}
+
+interface SellerProductVariant {
+  name: string;
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  sellerProductId: string;
+  sellerProductVariantsOptions: SellerProductVariantOption[]; // Ensure this is included
+}
+
+export interface ProductFormProps {
+  id: string;
+  name: string;
+  description: string;
+  status: string;
+  images: string[];
+  brand: string;
+  materials: string[];
+  height: number;
+  weight: number;
+  sku: string;
+  sellerProductVariants: SellerProductVariant[]; // Ensure this includes the updated type
+  category: string;
+  tags: string[];
+  warrantyPeriod: string;
+  warrantyPolicy: string;
+  discount: number;
+}
 
 type Variation = {
   name: string;
@@ -58,6 +93,7 @@ const formSchema = z.object({
   description: z
     .string()
     .min(1, { message: "Product description is required" }),
+  status: z.string().min(1, { message: "Status is required" }),
   tags: z.array(z.string()).nonempty("Please at least one tag"),
   category: z.string().min(1, { message: "Category is required" }),
   discount: z.coerce.number().optional(),
@@ -114,34 +150,64 @@ const formSchema = z.object({
 const ProductForm = ({
   subCategories,
   sellerId,
+  initialData,
 }: {
   subCategories: SellerSubCategory[];
   sellerId: string;
+  initialData: ProductFormProps;
 }) => {
-  const [variations, setVariations] = useState<Variation[]>([
-    { name: "", options: [{ name: "", price: 0, stock: 0 }], locked: false },
-  ]);
-
+  const [variations, setVariations] = useState<Variation[]>(
+    initialData?.sellerProductVariants?.map((variant) => ({
+      name: variant.name,
+      options: variant.sellerProductVariantsOptions.map((option) => ({
+        name: option.name,
+        price: option.price,
+        stock: option.stock,
+      })),
+      locked: false,
+    })) || []
+  );
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      media: [],
-      brand: "",
-      materials: [],
-      height: 0,
-      weight: 0,
-      sku: "",
-      variations: [],
-      category: "",
-      tags: [],
-      warrantyPeriod: "",
-      warrantyPolicy: "",
-      discount: 0,
+      title: initialData.name || "",
+      description: initialData.description || "",
+      status: initialData.status || "",
+      media: initialData.images || [],
+      brand: initialData.brand || "",
+      materials: initialData.materials || [],
+      height: initialData.height || 0,
+      weight: initialData.weight || 0,
+      sku: initialData.sku || "",
+      variations:
+        initialData?.sellerProductVariants?.map((variant) => ({
+          name: variant.name,
+          options: variant.sellerProductVariantsOptions.map((option) => ({
+            name: option.name,
+            price: option.price,
+            stock: option.stock,
+          })),
+        })) || [],
+      category: initialData.category || "",
+      tags: initialData.tags || [],
+      warrantyPeriod: initialData.warrantyPeriod || "",
+      warrantyPolicy: initialData.warrantyPolicy || "",
+      discount: initialData.discount || 0,
     },
   });
+
+  useEffect(() => {
+      setVariations(initialData?.sellerProductVariants?.map((variant) => ({
+        name: variant.name,
+        options: variant.sellerProductVariantsOptions.map((option) => ({
+          name: option.name,
+          price: option.price,
+          stock: option.stock,
+        })),
+        locked: false,
+      })) || []);
+    }, [initialData]);
 
   useEffect(() => {
     form.setValue("variations", variations);
@@ -203,14 +269,23 @@ const ProductForm = ({
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-	console.log(values);
     try {
-      const res = await createProduct(values, sellerId);
-      if (res.success) {
-        toast.success(res.success);
-        router.push(`/seller/${sellerId}/manage-products`);
+      if (initialData) {
+        const res = await updateProduct(values, initialData.id, sellerId);
+        if (res.success) {
+          toast.success(res.success);
+          router.push(`/seller/${sellerId}/manage-products`);
+        } else {
+          toast.error(res.error);
+        }
       } else {
-        toast.error(res.error);
+        const res = await createProduct(values, sellerId);
+        if (res.success) {
+          toast.success(res.success);
+          router.push(`/seller/${sellerId}/manage-products`);
+        } else {
+          toast.error(res.error);
+        }
       }
     } catch (error) {
       console.error(error);
@@ -622,6 +697,33 @@ const ProductForm = ({
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem className="relative">
+                    <FormLabel>Status</FormLabel>
+                    <FormControl>
+                      <Select
+                        defaultValue={field.value}
+                        onValueChange={field.onChange}
+                        disabled={isSubmitting}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select the status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="In stock">In stock</SelectItem>
+                          <SelectItem value="Out of stock">
+                            Out of stock
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
             <div className="bg-white border shadow rounded md p-3 mt-4 space-y-4">
               <FormField
@@ -710,7 +812,7 @@ const ProductForm = ({
             </div>
             <div className="flex items-center gap-3 justify-end mt-5">
               <Button disabled={isSubmitting} type="submit">
-                Publish
+                {initialData ? "Save Changes" : "Create Product"}
               </Button>
               <Button
                 disabled={isSubmitting}
