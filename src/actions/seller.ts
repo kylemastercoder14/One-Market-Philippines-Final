@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import * as jose from "jose";
 import db from "@/lib/db";
 import { OtpVerificationHTML } from "@/components/email-template/otp-verification";
+import { WelcomeOnboardingHTML } from "../components/email-template/welcome-onboarding";
 
 export const loginSeller = async (email: string, password: string) => {
   try {
@@ -238,10 +239,48 @@ export const finishingSellerData = async (
       path: "/", // Adjust path as needed
     });
 
+    await sendWelcomeEmail(existingSeller.id, data.shopName, email);
+
     return { success: "Account created successfully", seller: existingSeller };
   } catch (error) {
     console.error(error);
     return { error: "An error occurred. Please try again later." };
+  }
+};
+
+export const sendWelcomeEmail = async (
+  sellerId: string,
+  storeName: string,
+  email: string
+) => {
+  const htmlContent = await WelcomeOnboardingHTML({
+    sellerId,
+    storeName,
+  });
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "onemarketphilippines2025@gmail.com",
+      pass: "vrbscailgpflucvn",
+    },
+  });
+
+  const message = {
+    from: "onemarketphilippines2025@gmail.com",
+    to: email,
+    subject: "Welcome to 1 Market Philippines | Seller Hub",
+    text: `Welcome to 1 Market Philippines | Seller Hub`,
+    html: htmlContent,
+  };
+
+  try {
+    await transporter.sendMail(message);
+
+    return { success: "Email has been sent." };
+  } catch (error) {
+    console.error("Error sending notification", error);
+    return { message: "An error occurred. Please try again." };
   }
 };
 
