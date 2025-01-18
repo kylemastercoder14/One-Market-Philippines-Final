@@ -14,6 +14,7 @@ const SellerSettings = async (props: {
     },
     include: {
       sellerAddress: true,
+      sellerCategory: true,
     },
   });
   return (

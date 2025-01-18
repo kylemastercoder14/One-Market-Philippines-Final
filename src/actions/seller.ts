@@ -286,6 +286,7 @@ export const finishSettingUpSeller = async (
         residentialAddress: completeAddress,
         contactPerson,
         contactNumber: phoneNumber,
+        nationality,
         isReturnAddress: isReturnRefundAddress,
       },
     });
@@ -294,5 +295,59 @@ export const finishSettingUpSeller = async (
   } catch (error) {
     console.error("Error finishing seller setup:", error);
     return { error: "An error occurred. Please try again later." };
+  }
+};
+
+export const updateSellerProfile = async (
+  values: {
+    storeName: string;
+    email: string;
+    givenName: string;
+    middleName?: string;
+    familyName: string;
+  },
+  sellerId: string
+) => {
+  try {
+    await db.seller.update({
+      where: {
+        id: sellerId,
+      },
+      data: {
+        name: values.storeName,
+        email: values.email,
+        givenName: values.givenName,
+        middleName: values.middleName,
+        familyName: values.familyName,
+      },
+    });
+  } catch (error) {
+    console.error("Error updating seller profile:", error);
+  }
+};
+
+export const updateSellerBilling = async (
+  values: {
+    nationality: string;
+    contactPerson: string;
+    contactNumber: string;
+    residentialAddress: string;
+  },
+  addressId: string
+) => {
+  try {
+    await db.sellerAddress.update({
+      where: {
+        id: addressId,
+      },
+      data: {
+        residentialAddress: values.residentialAddress,
+        contactPerson: values.contactPerson,
+        contactNumber: values.contactNumber,
+        nationality: values.nationality,
+      },
+    });
+  } catch (error) {
+    console.error("Error updating seller billing:", error);
   }
 };

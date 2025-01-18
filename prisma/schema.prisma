@@ -85,6 +85,7 @@ model SellerProduct {
   discount       Float?
   warrantyPeriod String?
   warrantyPolicy String?
+  status         String @default("In stock")
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
