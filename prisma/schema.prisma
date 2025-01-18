@@ -31,6 +31,7 @@ model Seller {
   sellerCategory     SellerCategory? @relation(fields: [sellerCategorySlug], references: [slug], onDelete: Cascade)
 
   sellerAddress SellerAddress[]
+  sellerProduct SellerProduct[]
 }
 
 model SellerCategory {
@@ -69,6 +70,54 @@ model SellerAddress {
   seller   Seller @relation(fields: [sellerId], references: [id], onDelete: Cascade)
 }
 
+model SellerProduct {
+  id             String   @id @default(cuid())
+  name           String
+  description    String
+  category       String
+  images         String[]
+  brand          String?
+  materials      String[]
+  weight         Float?
+  height         Float?
+  sku            String
+  tags           String[]
+  discount       Float?
+  warrantyPeriod String?
+  warrantyPolicy String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  sellerId String
+  seller   Seller @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+
+  sellerProductVariants SellerProductVariants[]
+}
+
+model SellerProductVariants {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sellerProductId String
+  sellerProduct   SellerProduct @relation(fields: [sellerProductId], references: [id], onDelete: Cascade)
+
+  sellerProductVariantsOptions SellerProductVariantsOptions[]
+}
+
+model SellerProductVariantsOptions {
+  id        String   @id @default(cuid())
+  name      String
+  price     Float
+  stock     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sellerProductVariantsId String
+  sellerProductVariants   SellerProductVariants @relation(fields: [sellerProductVariantsId], references: [id], onDelete: Cascade)
+}
+
 model Admin {
   id        String   @id @default(cuid())
   email     String
@@ -91,11 +140,11 @@ model AdminSettings {
 }
 
 model AdminPolicies {
-  id        String   @id @default(cuid())
-  terms     String?
-  privacy   String?
-  refund    String?
+  id                   String   @id @default(cuid())
+  terms                String?
+  privacy              String?
+  refund               String?
   intellectualProperty String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 }

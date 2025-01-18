@@ -1,6 +1,19 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
+
+export const generateSKU = () => {
+  // generate a random 10 characters with numbers and letters
+  const randomCharacters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let randomDigits = "";
+  for (let i = 0; i < 10; i++) {
+    randomDigits += randomCharacters.charAt(
+      Math.floor(Math.random() * randomCharacters.length)
+    );
+  }
+  return `${randomDigits.toUpperCase()}`;
+};
