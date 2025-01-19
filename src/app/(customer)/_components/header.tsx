@@ -9,8 +9,10 @@ import SupportDropdown from "./support-dropdown";
 import LanguageDropdown from "./language-dropdown";
 import { ShoppingCart } from "lucide-react";
 import CategoriesDropdown from "./categories-dropdown";
+import { usePathname } from "next/navigation";
 
 const Header = () => {
+  const pathname = usePathname();
   const [isNavbarVisible, setIsNavbarVisible] = React.useState(true);
   const lastScrollTop = React.useRef(0);
 
@@ -50,8 +52,8 @@ const Header = () => {
         <ul className="flex">
           <li>
             <Link
-              className="px-4 flex items-center gap-2 py-2 rounded-2xl hover:bg-zinc-300/70 text-black text-sm transition-colors duration-300"
-              href="/"
+              className={`px-4 flex items-center gap-2 py-2 rounded-2xl hover:bg-zinc-300/70 text-black text-sm transition-colors duration-300 ${pathname === "/best-sellers" ? "bg-zinc-300/70 border-b-2 border-zinc-600" : ""}`}
+              href="/best-sellers"
             >
               <Image width={15} height={15} src="/icons/like.svg" alt="Like" />
               <span>Best Sellers</span>
@@ -59,8 +61,8 @@ const Header = () => {
           </li>
           <li>
             <Link
-              className="px-4 flex items-center gap-2 py-2 rounded-2xl hover:bg-zinc-300/70 text-black text-sm transition-colors duration-300"
-              href="/"
+              className={`px-4 flex items-center gap-2 py-2 rounded-2xl hover:bg-zinc-300/70 text-black text-sm transition-colors duration-300 ${pathname === "/top-rated" ? "bg-zinc-300/70 border-b-2 border-zinc-600" : ""}`}
+              href="/top-rated"
             >
               <Image width={15} height={15} src="/icons/top.svg" alt="Like" />
               <span>Top Rated Products</span>
@@ -68,8 +70,8 @@ const Header = () => {
           </li>
           <li>
             <Link
-              className="px-4 flex items-center gap-2 py-2 rounded-2xl hover:bg-zinc-300/70 text-black text-sm transition-colors duration-300"
-              href="/"
+              className={`px-4 flex items-center gap-2 py-2 rounded-2xl hover:bg-zinc-300/70 text-black text-sm transition-colors duration-300 ${pathname === "/new-arrivals" ? "bg-zinc-300/70 border-b-2 border-zinc-600" : ""}`}
+              href="/new-arrivals"
             >
               New Arrivals
             </Link>

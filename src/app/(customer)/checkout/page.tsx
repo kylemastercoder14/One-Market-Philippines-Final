@@ -18,7 +18,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ProductCard from "@/components/globals/product-card";
-import { Input } from "../../../components/ui/input";
+import { Input } from "@/components/ui/input";
 
 const data = [
   {
