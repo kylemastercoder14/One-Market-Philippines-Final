@@ -1,18 +1,44 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/globals/theme-provider";
 import { Toaster } from "sonner";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+// Define local fonts
+const helveticaLight = localFont({
+  src: "./fonts/helvetica/helvetica-light.ttf",
+  variable: "--font-helvetica-light",
+});
+const helveticaRegular = localFont({
+  src: "./fonts/helvetica/Helvetica.ttf",
+  variable: "--font-helvetica-regular",
+});
+const helveticaBold = localFont({
+  src: "./fonts/helvetica/Helvetica-Bold.ttf",
+  variable: "--font-helvetica-bold",
+});
+const costaLight = localFont({
+  src: "./fonts/costa/CostaPtf-Light.otf",
+  variable: "--font-costa-light",
+});
+const costaRegular = localFont({
+  src: "./fonts/costa/CostaPtf-Regular.otf",
+  variable: "--font-costa-regular",
+});
+const costaBold = localFont({
+  src: "./fonts/costa/CostaPtf-Bold.otf",
+  variable: "--font-costa-bold",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// Combine all font variables
+const fontVariables = [
+  helveticaLight.variable,
+  helveticaRegular.variable,
+  helveticaBold.variable,
+  costaLight.variable,
+  costaRegular.variable,
+  costaBold.variable,
+].join(" ");
 
 export const metadata: Metadata = {
   title: "1 Market Philippines",
@@ -25,9 +51,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${fontVariables} antialiased`}
       >
         <ThemeProvider
           attribute="class"

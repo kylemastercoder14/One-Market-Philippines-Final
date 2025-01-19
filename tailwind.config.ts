@@ -15,6 +15,14 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        helveticaLight: "var(--font-helvetica-light)",
+        helveticaRegular: "var(--font-helvetica-regular)",
+        helveticaBold: "var(--font-helvetica-bold)",
+        costaLight: "var(--font-costa-light)",
+        costaRegular: "var(--font-costa-regular)",
+        costaBold: "var(--font-costa-bold)",
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

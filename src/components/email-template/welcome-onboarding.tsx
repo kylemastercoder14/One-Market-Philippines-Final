@@ -1,6 +1,5 @@
 import {
   Body,
-  Button,
   Container,
   Head,
   Heading,
@@ -77,7 +76,7 @@ export const WelcomeOnboarding = ({
 
           <Section className="text-center">
             <Link
-              href='http://localhost:3000/seller/${sellerId}/dashboard'
+              href={`http://localhost:3000/seller/${sellerId}/dashboard`}
               style={button}
             >
               Go to your dashboard
