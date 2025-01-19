@@ -83,7 +83,7 @@ const Header = () => {
         <SupportDropdown />
         <LanguageDropdown />
         <Link
-          href="/cart"
+          href="/shopping-cart"
           className="px-4 flex items-center gap-2 py-2 rounded-2xl hover:bg-zinc-300/70 text-black text-sm transition-colors relative duration-300"
         >
           <span className="text-xs bg-zinc-600 w-4 h-4 flex items-center rounded-full justify-center absolute text-white top-0 right-0">
