@@ -11,9 +11,8 @@ import {
 } from "@/components/ui/breadcrumb";
 import EncryptedBanner from "@/components/globals/encrypted-banner";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, Edit, List, TriangleAlert } from "lucide-react";
+import { ChevronRight, Edit, TriangleAlert } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
