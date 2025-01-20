@@ -4,7 +4,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div className="bg-zinc-900 h-[40vh] w-full px-[200px] py-10 text-white">
+    <div className="bg-zinc-900 md:h-[40vh] h-full w-full md:px-[200px] px-10 py-10 text-white">
       <div className="grid md:grid-cols-10 grid-cols-1 gap-5">
         <div className="col-span-2">
           <p className="font-semibold">Company info</p>
@@ -25,7 +25,7 @@ const Footer = () => {
               Terms & conditions
             </Link>
           </div>
-          <p className="font-semibold mt-20">We accept payments</p>
+          <p className="font-semibold md:mt-20 mt-5">We accept payments</p>
           <div className="flex items-center gap-2 mt-2">
             <Image
               title="Cash on delivery"

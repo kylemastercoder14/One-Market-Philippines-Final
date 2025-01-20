@@ -18,7 +18,7 @@ const Editor = ({
   );
   return (
     <div className="bg-white">
-      <ReactQuill theme="snow" value={value} onChange={onChange} />
+      <ReactQuill placeholder='Please enter the text here...' theme="snow" value={value} onChange={onChange} />
     </div>
   );
 };

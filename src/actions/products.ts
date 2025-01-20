@@ -1,144 +1,91 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
-import { z } from "zod";
 import db from "@/lib/db";
 
-// Your schema definition remains unchanged
-const formSchema = z.object({
-  title: z
-    .string()
-    .min(1, { message: "Product name is required" })
-    .max(100, { message: "Product name can't be more than 100 characters" }),
-  description: z
-    .string()
-    .min(1, { message: "Product description is required" }),
-  tags: z.array(z.string()).nonempty("Please at least one tag"),
-  category: z.string().min(1, { message: "Category is required" }),
-  discount: z.coerce.number().optional(),
-  warrantyPeriod: z.string().optional(),
-  warrantyPolicy: z.string().optional(),
-  media: z
-    .array(
-      z.union([z.string().url(), z.instanceof(File)]).refine(
-        (file) => {
-          if (typeof file === "string") {
-            return true; // URL is fine
-          } else if (file instanceof File) {
-            return file.size < 5 * 1024 * 1024; // Validate file size
-          }
-          return false;
-        },
-        {
-          message: "Image size must be less than 5MB",
-        }
-      )
-    )
-    .max(7, {
-      message: "Maximum 7 files are allowed",
-    })
-    .nullable(),
-  brand: z.string().optional(),
-  materials: z.array(z.string()).nonempty("Please at least one material"),
-  height: z.coerce.number().optional(),
-  weight: z.coerce.number().optional(),
-  sku: z.string().min(1, { message: "SKU is required" }),
-  variations: z
-    .array(
-      z.object({
-        id: z.string().optional(),
-        name: z.string().optional(),
-        options: z
-          .array(
-            z.object({
-              id: z.string().optional(),
-              name: z.string().min(1, { message: "Option name is required" }),
-              price: z.coerce
-                .number()
-                .min(0, { message: "Price must be a positive number" }),
-              stock: z.coerce
-                .number()
-                .min(0, { message: "Stock must be a positive number" }),
-            })
-          )
-          .min(1, { message: "At least one option is required" })
-          .optional(),
-      })
-    )
-    .optional(),
-});
-
-export const createProduct = async (
-  values: z.infer<typeof formSchema>,
-  sellerId: string
-) => {
+export const createProductWithVariants = async (values: any) => {
   try {
-    console.log("Input Values:", values);
+    // Destructure product data
+    const {
+      name,
+      slug,
+      description,
+      tags,
+      category,
+      images,
+      brand,
+      materials,
+      weight,
+      height,
+      sku,
+      discount,
+      warrantyPeriod,
+      warrantyPolicy,
+      sellerId,
+      variants,
+    } = values;
 
-    // Validate input
-    const validatedData = formSchema.parse(values);
-    console.log("Validated Data:", validatedData);
-
-    // Check if a product with the same name exists
+    // Check for an existing product with the same name and sellerId
     const existingProduct = await db.sellerProduct.findFirst({
-      where: { name: validatedData.title, sellerId },
+      where: { name, sellerId },
     });
 
     if (existingProduct) {
       return { error: "Product with this name already exists" };
     }
 
-    // Prepare product data
-    const productData = {
-      name: validatedData.title,
-      description: validatedData.description,
-      tags: validatedData.tags,
-      category: validatedData.category,
-      discount: validatedData.discount || 0,
-      warrantyPeriod: validatedData.warrantyPeriod || "",
-      warrantyPolicy: validatedData.warrantyPolicy || "",
-      images: (validatedData.media || []).filter(
-        (item): item is string => typeof item === "string"
-      ),
-      brand: validatedData.brand || "",
-      materials: validatedData.materials,
-      height: validatedData.height || 0,
-      weight: validatedData.weight || 0,
-      sku: validatedData.sku,
-      sellerId,
-    };
+    // Create the main product
+    const createdProduct = await db.sellerProduct.create({
+      data: {
+        name,
+        slug,
+        description,
+        tags,
+        category,
+        images,
+        brand,
+        materials,
+        weight,
+        height,
+        sku,
+        discount,
+        warrantyPeriod,
+        warrantyPolicy,
+        sellerId,
+      },
+    });
 
-    console.log("Product Data:", productData);
-
-    // Create product
-    const product = await db.sellerProduct.create({ data: productData });
-
-    // Handle variations
-    if (validatedData.variations) {
-      for (const variation of validatedData.variations) {
-        const variant = await db.sellerProductVariants.create({
+    // Create variants and their options if provided
+    if (variants && variants.length > 0) {
+      for (const variant of variants) {
+        const createdVariant = await db.sellerProductVariants.create({
           data: {
-            name: variation.name || "",
-            sellerProductId: product.id,
+            name: variant.name,
+            sellerProductSlug: createdProduct.slug,
           },
         });
 
-        if (variation.options) {
-          const variantOptionsData = variation.options.map((option) => ({
-            name: option.name,
-            price: option.price,
-            stock: option.stock,
-            sellerProductVariantsId: variant.id,
-          }));
-
-          await db.sellerProductVariantsOptions.createMany({
-            data: variantOptionsData,
-          });
+        if (variant.options && variant.options.length > 0) {
+          for (const option of variant.options) {
+            await db.sellerProductVariantsOptions.create({
+              data: {
+                name: option.name,
+                image: option.image || null,
+                price: option.price || 0,
+                stock: option.stock || 0,
+                sellerProductVariantsId: createdVariant.id,
+              },
+            });
+          }
         }
       }
     }
 
-    return { success: "Product created successfully" };
+    return {
+      success: "Product created successfully",
+      product: createdProduct,
+      sellerId: sellerId,
+    };
   } catch (error: any) {
     console.error("Error creating product:", error.message, error.stack);
     return {
@@ -147,135 +94,64 @@ export const createProduct = async (
   }
 };
 
-export const updateProduct = async (
-  values: z.infer<typeof formSchema>,
-  productId: string,
-  sellerId: string
-) => {
+export const createProduct = async (values: any, sellerId: string) => {
   try {
-    console.log("Input Values:", values);
+    // Destructure product data
+    const {
+      name,
+      slug,
+      description,
+      tags,
+      category,
+      images,
+      price,
+      brand,
+      materials,
+      weight,
+      height,
+      sku,
+      discount,
+      warrantyPeriod,
+      warrantyPolicy,
+    } = values;
 
-    // Validate input
-    const validatedData = formSchema.parse(values);
-    console.log("Validated Data:", validatedData);
-
-    // Check if a product with the same name exists
+    // Check for an existing product with the same name and sellerId
     const existingProduct = await db.sellerProduct.findFirst({
-      where: { name: validatedData.title, sellerId },
+      where: { name, sellerId },
     });
 
-    if (existingProduct && existingProduct.id !== productId) {
+    if (existingProduct) {
       return { error: "Product with this name already exists" };
     }
 
-    // Check if the product exists
-    const productExists = await db.sellerProduct.findUnique({
-      where: { id: productId },
+    // Create the main product
+    const createdProduct = await db.sellerProduct.create({
+      data: {
+        name,
+        slug,
+        description,
+        tags,
+        category,
+        images,
+        price,
+        brand,
+        materials,
+        weight,
+        height,
+        sku,
+        discount,
+        warrantyPeriod,
+        warrantyPolicy,
+        sellerId,
+      },
     });
 
-    if (!productExists) {
-      return { error: "Product not found" };
-    }
-
-    // Prepare product data
-    const productData = {
-      name: validatedData.title,
-      description: validatedData.description,
-      tags: validatedData.tags,
-      category: validatedData.category,
-      discount: validatedData.discount || 0,
-      warrantyPeriod: validatedData.warrantyPeriod || "",
-      warrantyPolicy: validatedData.warrantyPolicy || "",
-      images: (validatedData.media || []).filter(
-        (item): item is string => typeof item === "string"
-      ),
-      brand: validatedData.brand || "",
-      materials: validatedData.materials,
-      height: validatedData.height || 0,
-      weight: validatedData.weight || 0,
-      sku: validatedData.sku,
+    return {
+      success: "Product created successfully",
+      product: createdProduct,
     };
-
-    console.log("Product Data:", productData);
-
-    // Update product
-    await db.sellerProduct.update({
-      where: { id: productId },
-      data: productData,
-    });
-
-    // Handle variations
-    if (validatedData.variations) {
-      for (const variation of validatedData.variations) {
-        let variant;
-
-        if (variation.id) {
-          variant = await db.sellerProductVariants.findUnique({
-            where: { id: variation.id },
-          });
-
-          if (variant) {
-            await db.sellerProductVariants.update({
-              where: { id: variation.id },
-              data: {
-                name: variation.name || "",
-              },
-            });
-          } else {
-            variant = await db.sellerProductVariants.create({
-              data: {
-                name: variation.name || "",
-                sellerProductId: productId,
-              },
-            });
-          }
-        } else {
-          variant = await db.sellerProductVariants.create({
-            data: {
-              name: variation.name || "",
-              sellerProductId: productId,
-            },
-          });
-        }
-
-        if (variation.options) {
-          for (const option of variation.options) {
-            if (option.id) {
-              const optionExists =
-                await db.sellerProductVariantsOptions.findUnique({
-                  where: { id: option.id },
-                });
-
-              if (optionExists) {
-                await db.sellerProductVariantsOptions.update({
-                  where: { id: option.id },
-                  data: {
-                    name: option.name,
-                    price: option.price,
-                    stock: option.stock,
-                  },
-                });
-              } else {
-                console.error(`Option not found for id: ${option.id}`);
-              }
-            } else {
-              await db.sellerProductVariantsOptions.create({
-                data: {
-                  name: option.name,
-                  price: option.price,
-                  stock: option.stock,
-                  sellerProductVariantsId: variant.id,
-                },
-              });
-            }
-          }
-        }
-      }
-    }
-
-    return { success: "Product updated successfully" };
   } catch (error: any) {
-    console.error("Error updating product:", error.message, error.stack);
+    console.error("Error creating product:", error.message, error.stack);
     return {
       error: error instanceof Error ? error.message : "Unknown error occurred",
     };

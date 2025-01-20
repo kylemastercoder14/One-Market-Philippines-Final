@@ -9,100 +9,15 @@ import {
 } from "@/components/ui/breadcrumb";
 import ProductImages from "@/components/globals/product-images";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
-
-const data = {
-  title:
-    "Women's Starry Night Graphic Tee - Casual Black Crew Neck Short Sleeve Top, 100% Polyester, Machine Washable, Perfect for Summer & Spring, Ladies T Shirts",
-  images: [
-    "/sample-2.webp",
-    "/sample-3.webp",
-    "/sample-4.jpg",
-    "/sample-5.webp",
-    "/sample-image.webp",
-  ],
-  originalPrice: 750,
-  discount: 13,
-  sold: 294,
-  description:
-    "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eveniet vitae provident, facere magni itaque, placeat inventore eos alias repellat, distinctio quis? Tenetur et vel, sequi voluptas ut qui magnam mollitia, illum commodi dolorum consequuntur, nulla exercitationem laborum doloremque distinctio? Sunt quam eaque ducimus quasi illum eveniet beatae aliquid nobis saepe cum recusandae nisi inventore accusamus quibusdam hic quia, obcaecati veniam, quidem earum facilis! Sunt, eius dicta, mollitia quod laborum commodi, deserunt reprehenderit nulla atque eaque accusamus dolores consequatur hic. Repellendus illo dignissimos quae, velit sapiente similique voluptate nemo voluptas placeat voluptatibus adipisci totam vel. Rerum eaque aliquid inventore illum! Dolores!",
-  category: "Apparel",
-  variations: [
-    {
-      name: "Color",
-      options: [
-        {
-          name: "Black",
-          image: "/sample-image.webp",
-          price: 650,
-        },
-        {
-          name: "White",
-          image: "/sample-2.webp",
-          price: 700,
-        },
-        {
-          name: "Red",
-          image: "/sample-3.webp",
-          price: 750,
-        },
-        {
-          name: "Blue",
-          image: "/sample-4.jpg",
-          price: 800,
-        },
-        {
-          name: "Green",
-          image: "/sample-5.webp",
-          price: 850,
-        },
-      ],
-    },
-    {
-      name: "Size",
-      options: [
-        {
-          name: "S",
-          image: "",
-          price: 0,
-        },
-        {
-          name: "M",
-          image: "",
-          price: 0,
-        },
-        {
-          name: "L",
-          image: "",
-          price: 0,
-        },
-        {
-          name: "XL",
-          image: "",
-          price: 0,
-        },
-        {
-          name: "XXL",
-          image: "",
-          price: 0,
-        },
-      ],
-    },
-  ],
-  brand: "",
-  tags: ["shirt", "trendy", "casual", "fashion", "top"],
-  warrantyPeriod: "2 weeks",
-  weight: "0.5 kg",
-  height: "10 cm",
-  materials: ["Polyester", "Cotton", "Spandex"],
-  sku: "SKU-1237523",
-  seller: "Jeorge Trendy Shop",
-  sellerImage: "/profile.jpg",
-};
+import { ChevronRight, Minus, Plus } from "lucide-react";
+import { PRODUCTS } from "../../../../static-products";
+import Color from "@/components/globals/color";
+import Size from "@/components/globals/size";
+import { Button } from "@/components/ui/button";
 
 const ProductSlug = () => {
   return (
-    <div className="px-[200px] pb-20 pt-24">
+    <div className="md:px-[200px] px-10 pb-20 pt-24">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -119,36 +34,128 @@ const ProductSlug = () => {
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage className="truncate w-96">
-              Women&apos;s Starry Night Graphic Tee - Casual Black Crew Neck
-              Short Sleeve Top, 100% Polyester, Machine Washable, Perfect for
-              Summer & Spring, Ladies T Shirts
+              {PRODUCTS.title}
             </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
       <div className="relative flex flex-col md:flex-row gap-16 mt-5">
         {/* IMAGES */}
-        <div className="w-full lg:w-1/2 md:sticky top-20 h-max">
-          <ProductImages images={data.images} />
+        <div className="w-full lg:w-1/2 overflow-y-auto md:max-h-[72vh] no-scrollbar">
+          <ProductImages images={PRODUCTS.images} />
+          <div className="mt-5">
+            <p className="font-semibold md:w-[700px] w-full md:truncate">
+              Product details of {PRODUCTS.title}
+            </p>
+            <div className="flex items-center mt-2 gap-2">
+              {PRODUCTS.tags.map((tag, index) => (
+                <div
+                  className="bg-black/80 text-white rounded-md text-xs px-2 py-1"
+                  key={index}
+                >
+                  {tag}
+                </div>
+              ))}
+            </div>
+            <div className="grid md:grid-cols-2 grid-cols-1 md:gap-5 gap-2 mt-4">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <p className="font-semibold">Brand:</p>
+                  <p>{PRODUCTS.brand || "N/A"}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <p className="font-semibold">Weight:</p>
+                  <p>{PRODUCTS.weight || "N/A"}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <p className="font-semibold">Height:</p>
+                  <p>{PRODUCTS.height || "N/A"}</p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <p className="font-semibold">SKU:</p>
+                  <p>{PRODUCTS.sku || "N/A"}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <p className="font-semibold">Materials:</p>
+                  <p>{PRODUCTS.materials.join(", ") || "N/A"}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <p className="font-semibold">Warranty Period:</p>
+                  <p>{PRODUCTS.warrantyPeriod || "N/A"}</p>
+                </div>
+              </div>
+            </div>
+            <p className='mt-3'>{PRODUCTS.description}</p>
+          </div>
         </div>
         {/* CONTENT */}
         <div className="w-full md:w-1/2 flex flex-col">
-          <h3>{data.title}</h3>
+          <h3>{PRODUCTS.title}</h3>
           <div className="text-sm mt-2 flex items-center gap-2">
             <Link href="#">
-              Sold by: <span className="text-orange-600 hover:underline">{data.seller}</span>
+              Sold by:{" "}
+              <span className="text-orange-600 hover:underline">
+                {PRODUCTS.seller}
+              </span>
             </Link>
             <ChevronRight className="w-4 h-4" />
           </div>
-		  <div className="flex items-center gap-3 text-lg mt-3">
-              <p className="text-orange-600 font-semibold">Starts at ₱{data.variations[0].options[0].price}</p>
-              <p className="text-muted-foreground line-through">
-                ₱{data.originalPrice}
-              </p>
-              <div className="border border-orange-600 bg-orange-600 px-1.5 py-0.5 rounded-md text-white text-xs">
-                -{data.discount}%
-              </div>
+          <div className="flex items-center gap-3 text-lg mt-3">
+            <p className="text-orange-600 font-semibold">
+              Starts at ₱{PRODUCTS.variations[0].options[0].price}
+            </p>
+            <p className="text-muted-foreground line-through">
+              ₱{PRODUCTS.discountedPrice}
+            </p>
+            <p>{PRODUCTS.sold}+ sold</p>
+            <div className="border border-orange-600 bg-orange-600 px-1.5 py-0.5 rounded-md text-white text-xs">
+              -{PRODUCTS.discount}% OFF
             </div>
+          </div>
+          <p className="font-semibold mt-5">Color: </p>
+          <Color
+            data={
+              PRODUCTS.variations.find(
+                (variation) => variation.name === "Color"
+              )?.options || []
+            }
+          />
+          <p className="font-semibold mt-5">Size: </p>
+          <Size
+            data={
+              PRODUCTS.variations.find((variation) => variation.name === "Size")
+                ?.options || []
+            }
+          />
+          <div className="flex items-center gap-3 mt-5">
+            <p className="font-semibold">Qty:</p>
+            <div className="border flex justify-center items-center gap-3 py-2 w-24">
+              <Minus className="w-4 h-4" />
+              <input
+                type="text"
+                className="w-5 text-sm text-center bg-white border-0 outline-none"
+                placeholder="1"
+              />
+              <Plus className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="mt-5">
+            <p className="text-[#0A8800] font-semibold">Shipping: TBA</p>
+            <p className="mt-3 text-sm">
+              Delivery: 10-30 minuted depending on the location
+            </p>
+            <p className="mt-1 text-sm">
+              <strong>Courier</strong>: We aim to support tricycle drivers,
+              pedicab drivers, and cyclists by offering them opportunities to
+              serve as couriers, providing them with an additional source of
+              income.
+            </p>
+          </div>
+          <Button size="lg" className="rounded-full h-12 mt-5">
+            Add to cart &rarr;
+          </Button>
         </div>
       </div>
     </div>

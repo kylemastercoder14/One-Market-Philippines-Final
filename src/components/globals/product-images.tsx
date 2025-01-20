@@ -14,7 +14,7 @@ const ProductImages = ({ images }: { images: string[] }) => {
           <div
             key={index}
             onMouseEnter={() => setSelectedIndex(index)} // Change image on hover
-            className={`cursor-pointer h-20 w-full relative gap-4 ${
+            className={`cursor-pointer md:h-20 h-14 w-full relative gap-4 ${
               selectedIndex === index ? "border-2 border-black" : ""
             }`}
           >
@@ -30,7 +30,7 @@ const ProductImages = ({ images }: { images: string[] }) => {
       </div>
 
       {/* Main Selected Image */}
-      <div className="h-[700px] col-span-9 relative">
+      <div className="md:h-[700px] h-[500px] col-span-9 relative">
         <Image
           src={images[selectedIndex]}
           alt="Selected Image"

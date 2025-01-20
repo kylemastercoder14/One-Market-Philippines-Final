@@ -72,6 +72,7 @@ model SellerAddress {
 
 model SellerProduct {
   id             String   @id @default(cuid())
+  slug           String   @unique
   name           String
   description    String
   category       String
@@ -80,12 +81,13 @@ model SellerProduct {
   materials      String[]
   weight         Float?
   height         Float?
+  price          Float?
   sku            String
   tags           String[]
   discount       Float?
   warrantyPeriod String?
   warrantyPolicy String?
-  status         String @default("In stock")
+  status         String   @default("In stock")
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -97,12 +99,12 @@ model SellerProduct {
 
 model SellerProductVariants {
   id        String   @id @default(cuid())
-  name      String
+  name      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  sellerProductId String
-  sellerProduct   SellerProduct @relation(fields: [sellerProductId], references: [id], onDelete: Cascade)
+  sellerProductSlug String
+  sellerProduct   SellerProduct @relation(fields: [sellerProductSlug], references: [slug], onDelete: Cascade)
 
   sellerProductVariantsOptions SellerProductVariantsOptions[]
 }
@@ -110,8 +112,9 @@ model SellerProductVariants {
 model SellerProductVariantsOptions {
   id        String   @id @default(cuid())
   name      String
-  price     Float
-  stock     Int
+  image     String?
+  price     Float?
+  stock     Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

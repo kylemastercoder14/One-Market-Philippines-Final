@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const data = [
   {
@@ -37,7 +38,66 @@ const data = [
   },
 ];
 
+const links = [
+  {
+    title: "Your orders",
+    icon: "📦",
+    href: "/order-history",
+  },
+  {
+    title: "Your reviews",
+    icon: "📝",
+    href: "/reviews",
+  },
+  {
+    title: "Your profile",
+    icon: "👤",
+    href: "/profile",
+  },
+  {
+    title: "Coupons & offers",
+    icon: "💰",
+    href: "/coupons",
+  },
+  {
+    title: "Followed stores",
+    icon: "🏪",
+    href: "/stores",
+  },
+  {
+    title: "Browsing history",
+    icon: "🔍",
+    href: "/history",
+  },
+  {
+    title: "Addresses",
+    icon: "🏠",
+    href: "/addresses",
+  },
+  {
+    title: "Account security",
+    icon: "🔒",
+    href: "/security",
+  },
+  {
+    title: "Notifications",
+    icon: "🔔",
+    href: "/notifications",
+  },
+  {
+    title: "Switch accounts",
+    icon: "🔄",
+    href: "/switch",
+  },
+  {
+    title: "Sign out",
+    icon: "🚪",
+    href: "/sign-out",
+  },
+];
+
 const UserDropdown = () => {
+  const router = useRouter();
   const [showDropdown, setShowDropdown] = useState(false); // State to manage dropdown visibility
   const [showBrowsingHistory, setShowBrowsingHistory] = useState(false); // State for browsing history visibility
 
@@ -132,24 +192,14 @@ const UserDropdown = () => {
                 </div>
               </div>
               <ul className="p-4 space-y-2">
-                {[
-                  "Your orders",
-                  "Your reviews",
-                  "Coupons & offers",
-                  "Credit balance",
-                  "Followed stores",
-                  "Browsing history",
-                  "Addresses",
-                  "Account security",
-                  "Notifications",
-                  "Switch accounts",
-                  "Sign out",
-                ].map((option, index) => (
+                {links.map((option, index) => (
                   <li
+                    onClick={() => router.push(option.href)}
                     key={index}
-                    className="text-sm hover:bg-zinc-100 p-2 rounded-md cursor-pointer"
+                    className="text-sm hover:bg-zinc-100 p-2 flex items-center gap-2 rounded-md cursor-pointer"
                   >
-                    {option}
+                    <span className="text-sm">{option.icon}</span>
+                    <span>{option.title}</span>
                   </li>
                 ))}
               </ul>

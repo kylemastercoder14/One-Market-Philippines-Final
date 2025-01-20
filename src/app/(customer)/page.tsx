@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <>
       <Banner />
-      <main className="px-[200px] pb-20 pt-10">
+      <main className="md:px-[200px] px-10 pb-20 pt-10">
         <Notice />
         <section className="mt-10">
           <div className="flex items-center justify-between">

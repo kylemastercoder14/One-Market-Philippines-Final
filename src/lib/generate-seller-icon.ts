@@ -4,6 +4,8 @@ export const generateSellerIcon = (category: string) => {
       return "🏠";
     case "Kitchenware":
       return "🍴";
+    case "men's-fashion":
+      return "👔";
     case "Electronics":
       return "📱";
     case "Fashion":

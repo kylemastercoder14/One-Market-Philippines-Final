@@ -9,6 +9,7 @@ const SellerProducts = async (props: {
   }>;
 }) => {
   const params = await props.params;
+
   const data = await db.sellerProduct.findMany({
     where: {
       sellerId: params.sellerId,
@@ -27,25 +28,40 @@ const SellerProducts = async (props: {
 
   const formattedData: ProductColumn[] =
     data.map((item) => {
-      const lowestPrice = item.sellerProductVariants
-        .flatMap((variant) =>
-          variant.sellerProductVariantsOptions.map((option) => option.price)
-        )
-        .reduce((min, price) => Math.min(min, price), Infinity);
+      // Flatten all options to find the minimum price but exclude the zero prices
+      const lowestPrice = item.sellerProductVariants.reduce((acc, variant) => {
+        const price = variant.sellerProductVariantsOptions.reduce(
+          (acc, option) => {
+            if (option.price === 0) {
+              return acc;
+            }
+
+            return option.price !== null ? Math.min(acc, option.price) : acc;
+          },
+          Infinity
+        );
+
+        return Math.min(acc, price);
+      }, Infinity);
+
+      const isThereAPrice = item.price !== null && item.price !== 0;
+      const priceWithVariants =
+        lowestPrice !== Infinity
+          ? `Starts at ₱${lowestPrice.toFixed(2)}`
+          : "Price unavailable";
 
       return {
         id: item.id,
         name: item.name,
-        image: item.images[1],
+        image: item.images[0],
         category: item.category,
         sku: item.sku,
         status: item.status,
         href: `/seller/${params.sellerId}/manage-products/${item.id}`,
         tags: item.tags.join(", "),
-        price:
-          lowestPrice !== Infinity
-            ? `Starts at ₱${lowestPrice.toFixed(2)}`
-            : "Price unavailable",
+        price: isThereAPrice
+          ? `₱${item.price?.toFixed(2) ?? "0.00"}`
+          : priceWithVariants,
       };
     }) || [];
 
