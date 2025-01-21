@@ -27,10 +27,7 @@ import {
 import { CircleHelp } from "lucide-react";
 import { TagsInput } from "@/components/ui/tags-input";
 import { toast } from "sonner";
-import {
-  createCategory,
-  updateCategory,
-} from "@/actions/categories";
+import { createCategory, updateCategory } from "@/actions/categories";
 
 interface CategoryFormProps extends SellerCategory {
   sellerSubCategory: SellerSubCategory[];
@@ -94,7 +91,7 @@ const CategoryForm = ({
           id: initialData.id,
           name: values.name,
           slug: values.slug || "",
-          subCategories: values.subCategories,
+          subCategories: values.subCategories.filter(Boolean), // Remove empty values
         });
 
         if (res.error) {
@@ -107,7 +104,9 @@ const CategoryForm = ({
         const res = await createCategory({
           ...values,
           slug: values.slug || "",
+          subCategories: values.subCategories.filter(Boolean), // Remove empty values
         });
+
         if (res.error) {
           toast.error(res.error);
         } else {
@@ -116,7 +115,7 @@ const CategoryForm = ({
         }
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error in onSubmit:", error);
       toast.error("Something went wrong. Please try again.");
     }
   }
@@ -215,7 +214,13 @@ const CategoryForm = ({
           <Button className="mt-3" disabled={isSubmitting} type="submit">
             {action}
           </Button>
-          <Button variant="ghost" className="mt-3 mx-2" disabled={isSubmitting} onClick={() => router.back()} type="button">
+          <Button
+            variant="ghost"
+            className="mt-3 mx-2"
+            disabled={isSubmitting}
+            onClick={() => router.back()}
+            type="button"
+          >
             Cancel
           </Button>
         </form>

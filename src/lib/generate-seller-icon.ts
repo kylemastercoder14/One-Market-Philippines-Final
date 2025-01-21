@@ -1,8 +1,8 @@
 export const generateSellerIcon = (category: string) => {
   switch (category) {
-    case "Home Supplies":
+    case "home-supplies":
       return "🏠";
-    case "Kitchenware":
+    case "kitchenware":
       return "🍴";
     case "men's-fashion":
       return "👔";
@@ -128,5 +128,7 @@ export const generateSellerIcon = (category: string) => {
       return "🌸";
     case "Cosmetics":
       return "💅";
+    default:
+      return "🛒";
   }
 };
