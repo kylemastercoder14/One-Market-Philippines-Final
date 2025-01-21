@@ -6,7 +6,7 @@ import {
   CarouselContent,
   CarouselNext,
   CarouselPrevious,
-  CarouselItem
+  CarouselItem,
 } from "@/components/ui/carousel";
 import ProductCard from "@/components/globals/product-card";
 
@@ -15,6 +15,7 @@ const data = [
     title:
       "Women's Starry Night Graphic Tee - Casual Black Crew Neck Short Sleeve Top, 100% Polyester, Machine Washable, Perfect for Summer & Spring, Ladies T Shirts",
     image: "/sample-3.webp",
+    slug: "womens-starry-night-graphic-tee",
     price: 390,
     originalPrice: 500,
     sold: 3290,
@@ -25,6 +26,7 @@ const data = [
   {
     title:
       "Large Realistic Money Grass Leaf Plant - 18 Large Leaves, Wide Leaf Plant Decoration",
+    slug: "large-realistic-money-grass-leaf-plant",
     image: "/sample-2.webp",
     price: 128,
     originalPrice: 200,
@@ -36,6 +38,7 @@ const data = [
   {
     title:
       "Solar System for SATURN 3D Laser-Engraved Crystal Ball Night Light - USB Powered",
+    slug: "solar-system-for-saturn-3d-laser-engraved-crystal-ball-night-light",
     image: "/sample-4.jpg",
     price: 299,
     originalPrice: 500,
@@ -47,6 +50,7 @@ const data = [
   {
     title:
       "12pcs/pack Thickened Bedroom Living Room Full Town Splicing Carpet Rug, Room Bedside Blanket Warm",
+    slug: "12pcs-pack-thickened-bedroom-living-room-full-town-splicing-carpet-rug",
     image: "/sample-5.webp",
     price: 467,
     originalPrice: 800,
@@ -58,6 +62,7 @@ const data = [
   {
     title:
       "[10 to 100pcs] 3-Ply Disposable Face Mask - 3 Layers of Protection, Comfortable Earloop, Breathable, Dustproof, Anti-Droplets, Anti-Pollen, Anti-Fog",
+    slug: "10-to-100pcs-3-ply-disposable-face-mask",
     image: "/sample-image.webp",
     price: 230,
     originalPrice: 328,
@@ -93,6 +98,7 @@ const FlashDealsSection = () => {
               className="pl-1 md:basis-1/2 lg:basis-1/5"
             >
               <ProductCard
+                slug={product.slug}
                 title={product.title}
                 image={product.image}
                 price={product.price}

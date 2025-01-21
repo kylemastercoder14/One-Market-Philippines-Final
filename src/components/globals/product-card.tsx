@@ -6,12 +6,14 @@ import Image from "next/image";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { StarIcon as Star } from "@heroicons/react/24/outline";
 import { formatTime } from "@/lib/utils";
+import { useRouter } from 'next/navigation';
 
 const ProductCard = ({
   title,
   image,
   price,
   originalPrice,
+  slug,
   sold,
   discount,
   ratingCount,
@@ -21,6 +23,7 @@ const ProductCard = ({
   title: string;
   image: string;
   price: number;
+  slug: string;
   originalPrice: number;
   sold?: number;
   discount: number;
@@ -29,8 +32,9 @@ const ProductCard = ({
   initialCountdown?: number;
   className?: string;
 }) => {
+  const router = useRouter();
   return (
-    <div className="p-1">
+    <div className="p-1 cursor-pointer" onClick={() => router.push(`/${slug}`)}>
       <Card className="border-0 shadow-none">
         <CardContent className="p-0">
           <div className={`relative group overflow-hidden w-full h-[250px] ${className}`}>
