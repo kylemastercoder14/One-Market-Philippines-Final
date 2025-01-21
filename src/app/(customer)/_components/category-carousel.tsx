@@ -7,22 +7,29 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { CATEGORIES } from "@/lib/generate-categories";
+import db from "@/lib/db";
 
-const CategoryCarousel = () => {
+const CategoryCarousel = async () => {
+  const categories = await db.sellerCategory.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
   return (
     <div className="mt-5">
       <Carousel className="w-full">
         <CarouselContent className="-ml-1">
-          {CATEGORIES.map((category, index) => (
+          {categories.map((category, index) => (
             <CarouselItem
               className="pl-1 md:basis-1/2 lg:basis-[15%]"
               key={index}
             >
               <div className="p-1">
-                <Card className='rounded-full'>
+                <Card className="rounded-full">
                   <CardContent className="text-sm p-0">
-                    <div className='flex items-center justify-center p-3'>{category}</div>
+                    <div className="flex items-center justify-center p-3">
+                      {category.name}
+                    </div>
                   </CardContent>
                 </Card>
               </div>

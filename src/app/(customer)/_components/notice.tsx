@@ -4,7 +4,7 @@ import { ChevronRight, LockKeyhole, Truck, Wallet2 } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import { Modal } from "@/components/ui/modal";
-import { Button } from "../../../components/ui/button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 const Notice = () => {

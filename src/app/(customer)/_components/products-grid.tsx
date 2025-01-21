@@ -5,6 +5,7 @@ const data = [
   {
     title:
       "Women's Starry Night Graphic Tee - Casual Black Crew Neck Short Sleeve Top, 100% Polyester, Machine Washable, Perfect for Summer & Spring, Ladies T Shirts",
+    slug: "starry-night-graphic-tee",
     image: "/sample-3.webp",
     price: 390,
     originalPrice: 500,
@@ -16,6 +17,7 @@ const data = [
   {
     title:
       "Large Realistic Money Grass Leaf Plant - 18 Large Leaves, Wide Leaf Plant Decoration",
+    slug: "realistic-money-grass-leaf-plant",
     image: "/sample-2.webp",
     price: 128,
     originalPrice: 200,
@@ -27,6 +29,7 @@ const data = [
   {
     title:
       "Solar System for SATURN 3D Laser-Engraved Crystal Ball Night Light - USB Powered",
+    slug: "solar-system-saturn-3d-laser-engraved-crystal-ball-night-light",
     image: "/sample-4.jpg",
     price: 299,
     originalPrice: 500,
@@ -38,6 +41,7 @@ const data = [
   {
     title:
       "12pcs/pack Thickened Bedroom Living Room Full Town Splicing Carpet Rug, Room Bedside Blanket Warm",
+    slug: "thickened-bedroom-living-room-full-town-splicing-carpet-rug",
     image: "/sample-5.webp",
     price: 467,
     originalPrice: 800,
@@ -49,6 +53,7 @@ const data = [
   {
     title:
       "[10 to 100pcs] 3-Ply Disposable Face Mask - 3 Layers of Protection, Comfortable Earloop, Breathable, Dustproof, Anti-Droplets, Anti-Pollen, Anti-Fog",
+    slug: "3-ply-disposable-face-mask",
     image: "/sample-image.webp",
     price: 230,
     originalPrice: 328,
@@ -60,6 +65,7 @@ const data = [
   {
     title:
       "Women's Starry Night Graphic Tee - Casual Black Crew Neck Short Sleeve Top, 100% Polyester, Machine Washable, Perfect for Summer & Spring, Ladies T Shirts",
+    slug: "starry-night-graphic-tee",
     image: "/sample-3.webp",
     price: 390,
     originalPrice: 500,
@@ -71,6 +77,7 @@ const data = [
   {
     title:
       "Large Realistic Money Grass Leaf Plant - 18 Large Leaves, Wide Leaf Plant Decoration",
+    slug: "realistic-money-grass-leaf-plant",
     image: "/sample-2.webp",
     price: 128,
     originalPrice: 200,
@@ -82,6 +89,7 @@ const data = [
   {
     title:
       "Solar System for SATURN 3D Laser-Engraved Crystal Ball Night Light - USB Powered",
+    slug: "solar-system-saturn-3d-laser-engraved-crystal-ball-night-light",
     image: "/sample-4.jpg",
     price: 299,
     originalPrice: 500,
@@ -93,6 +101,7 @@ const data = [
   {
     title:
       "12pcs/pack Thickened Bedroom Living Room Full Town Splicing Carpet Rug, Room Bedside Blanket Warm",
+    slug: "thickened-bedroom-living-room-full-town-splicing-carpet-rug",
     image: "/sample-5.webp",
     price: 467,
     originalPrice: 800,
@@ -104,6 +113,7 @@ const data = [
   {
     title:
       "[10 to 100pcs] 3-Ply Disposable Face Mask - 3 Layers of Protection, Comfortable Earloop, Breathable, Dustproof, Anti-Droplets, Anti-Pollen, Anti-Fog",
+    slug: "3-ply-disposable-face-mask",
     image: "/sample-image.webp",
     price: 230,
     originalPrice: 328,
@@ -115,6 +125,7 @@ const data = [
   {
     title:
       "Women's Starry Night Graphic Tee - Casual Black Crew Neck Short Sleeve Top, 100% Polyester, Machine Washable, Perfect for Summer & Spring, Ladies T Shirts",
+    slug: "starry-night-graphic-tee",
     image: "/sample-3.webp",
     price: 390,
     originalPrice: 500,
@@ -126,6 +137,7 @@ const data = [
   {
     title:
       "Large Realistic Money Grass Leaf Plant - 18 Large Leaves, Wide Leaf Plant Decoration",
+    slug: "realistic-money-grass-leaf-plant",
     image: "/sample-2.webp",
     price: 128,
     originalPrice: 200,
@@ -137,6 +149,7 @@ const data = [
   {
     title:
       "Solar System for SATURN 3D Laser-Engraved Crystal Ball Night Light - USB Powered",
+    slug: "solar-system-saturn-3d-laser-engraved-crystal-ball-night-light",
     image: "/sample-4.jpg",
     price: 299,
     originalPrice: 500,
@@ -148,6 +161,7 @@ const data = [
   {
     title:
       "12pcs/pack Thickened Bedroom Living Room Full Town Splicing Carpet Rug, Room Bedside Blanket Warm",
+    slug: "thickened-bedroom-living-room-full-town-splicing-carpet-rug",
     image: "/sample-5.webp",
     price: 467,
     originalPrice: 800,
@@ -159,6 +173,7 @@ const data = [
   {
     title:
       "[10 to 100pcs] 3-Ply Disposable Face Mask - 3 Layers of Protection, Comfortable Earloop, Breathable, Dustproof, Anti-Droplets, Anti-Pollen, Anti-Fog",
+    slug: "3-ply-disposable-face-mask",
     image: "/sample-image.webp",
     price: 230,
     originalPrice: 328,
@@ -174,6 +189,7 @@ const ProductsGrid = () => {
     <div className="mt-10 grid md:grid-cols-5 grid-cols-1 gap-5">
       {data.map((product, index) => (
         <ProductCard
+          slug={product.slug}
           key={index}
           title={product.title}
           image={product.image}

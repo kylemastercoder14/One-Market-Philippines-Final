@@ -127,3 +127,18 @@ export const deleteCategory = async (id: string) => {
     return { error: "Something went wrong. Please try again" };
   }
 };
+
+export const getAllCategories = async () => {
+  try {
+    const categories = await db.sellerCategory.findMany({
+      include: {
+        sellerSubCategory: true,
+      },
+    });
+
+    return categories;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};

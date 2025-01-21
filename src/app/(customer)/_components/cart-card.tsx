@@ -1,7 +1,7 @@
 import React from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Image from "next/image";
-import { Button } from "../../../components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2 } from "lucide-react";
 
 const CartCard = ({
