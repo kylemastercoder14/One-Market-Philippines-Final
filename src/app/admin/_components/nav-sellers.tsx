@@ -4,9 +4,8 @@ import {
   ArrowUpRight,
   ChartSpline,
   MoreHorizontal,
-  Plus,
-  Send,
   ShoppingBag,
+  Wallet,
 } from "lucide-react";
 
 import {
@@ -35,19 +34,13 @@ export function NavSellers({ sellers }: { sellers: Seller[] }) {
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <div className="flex items-center justify-between">
-        <SidebarGroupLabel>Sellers</SidebarGroupLabel>
-        <Plus
-          className="text-sidebar-foreground/70 w-3 h-3 cursor-pointer"
-          onClick={() => window.location.assign("https://www.facebook.com/")}
-        />
-      </div>
+      <SidebarGroupLabel>Sellers</SidebarGroupLabel>
 
       <SidebarMenu>
         {sellers.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
-              <div className='cursor-pointer'>
+              <div className="cursor-pointer">
                 <span>
                   {generateSellerIcon(item.sellerCategorySlug as string)}
                 </span>
@@ -73,16 +66,26 @@ export function NavSellers({ sellers }: { sellers: Seller[] }) {
                   <span>View Store</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    router.push(`/admin/sellers/${item.id}/products`)
+                  }
+                >
                   <ShoppingBag className="text-muted-foreground" />
                   <span>Store&apos;s Product</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Send className="text-muted-foreground" />
-                  <span>Notify Seller</span>
+                <DropdownMenuItem
+                  onClick={() =>
+                    router.push(`/admin/sellers/${item.id}/orders`)
+                  }
+                >
+                  <Wallet className="text-muted-foreground" />
+                  <span>Order History</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => router.push(`/admin/analytics`)}
+                >
                   <ChartSpline className="text-muted-foreground" />
                   <span>Analytics</span>
                 </DropdownMenuItem>

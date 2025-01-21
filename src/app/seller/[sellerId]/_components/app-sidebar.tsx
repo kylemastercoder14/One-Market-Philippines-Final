@@ -3,13 +3,14 @@
 import * as React from "react";
 import {
   Box,
+  FileText,
   LayoutDashboard,
   Megaphone,
   MessageCircleQuestion,
   Settings,
   ShoppingBag,
   Users,
-  Wallet,
+  Wallet2,
 } from "lucide-react";
 
 import {
@@ -45,24 +46,29 @@ export function AppSidebar({
       {
         title: "Orders",
         url: `/seller/${params.sellerId}/orders`,
-        icon: Wallet,
+        icon: FileText,
       },
-	  {
+      {
         title: "Shipping",
         url: `/seller/${params.sellerId}/shipping`,
         icon: Box,
       },
-	  {
+      {
         title: "Promotions",
         url: `/seller/${params.sellerId}/promotions`,
         icon: Megaphone,
       },
-	  {
+      {
         title: "Customers",
         url: `/seller/${params.sellerId}/customers`,
         icon: Users,
       },
-	  {
+      {
+        title: "Payment Method",
+        url: `/seller/${params.sellerId}/payment-method`,
+        icon: Wallet2,
+      },
+      {
         title: "Settings",
         url: `/seller/${params.sellerId}/settings`,
         icon: Settings,

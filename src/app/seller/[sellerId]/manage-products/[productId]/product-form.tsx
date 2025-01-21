@@ -163,6 +163,7 @@ const ProductForm = ({
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsAlertOpen(false);
     try {
       if (values.isVariant) {
         handleAddProductToStorage(values);
@@ -189,6 +190,8 @@ const ProductForm = ({
     } catch (error) {
       console.error(error);
       toast.error("Failed to create product");
+    } finally {
+      setIsAlertOpen(false);
     }
   }
 
@@ -615,7 +618,10 @@ const ProductForm = ({
                 />
               </div>
               <div className="flex items-center gap-3 justify-end mt-5">
-                <Button
+                {initialData ? (
+                  <span className='font-semibold text-sm'>Update button not working yet</span>
+                ) : (
+                  <Button
                   disabled={isSubmitting || !isValid}
                   type="button"
                   onClick={() => {
@@ -632,6 +638,7 @@ const ProductForm = ({
                 >
                   {initialData ? "Save Changes" : "Create Product"}
                 </Button>
+                )}
                 <Button
                   disabled={isSubmitting}
                   onClick={() => router.back()}

@@ -2,8 +2,8 @@
 import React from "react";
 import UnderConstruction from "@/components/globals/under-construction";
 
-const AdminDashboard = () => {
+const SellerShipping = () => {
   return <UnderConstruction />;
 };
 
-export default AdminDashboard;
+export default SellerShipping;

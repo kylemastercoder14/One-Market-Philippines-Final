@@ -414,3 +414,13 @@ export const createIntellectualPolicy = async (intellectual: string) => {
     return false;
   }
 };
+
+export const viewAllSettingsData = async () => {
+  try {
+    const settings = await db.adminSettings.findMany();
+    return settings;
+  } catch (error) {
+    console.error("Error fetching settings data:", error);
+    return [];
+  }
+};

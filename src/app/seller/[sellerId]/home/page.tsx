@@ -1,14 +1,9 @@
-import React from "react";
 
-const SellerHome = async (
-  props: {
-    params: Promise<{
-      sellerId: string;
-    }>;
-  }
-) => {
-  const params = await props.params;
-  return <div>SellerHome {params.sellerId}</div>;
+import React from "react";
+import UnderConstruction from "@/components/globals/under-construction";
+
+const SellerHome = () => {
+  return <UnderConstruction />;
 };
 
 export default SellerHome;

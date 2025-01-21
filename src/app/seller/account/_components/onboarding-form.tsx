@@ -495,7 +495,7 @@ const OnboardingComponent = ({
         </div>
       </Modal>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form autoComplete='off' onSubmit={form.handleSubmit(onSubmit)}>
           <div className="bg-white shadow-sm rounded-md border mt-4 mb-4 py-6 px-5">
             <p className={`text-md text-muted-foreground font-semibold`}>
               Business Type

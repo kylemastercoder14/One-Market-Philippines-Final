@@ -17,13 +17,12 @@ const AppHeader = () => {
   const pathname = usePathname();
   const params = useParams();
 
-  // Split the pathname into parts, removing "admin" and IDs
   const segments = pathname
     .split("/")
     .filter(
       (segment) =>
         segment && segment !== "seller" && !/^[a-zA-Z0-9]{10,}$/.test(segment)
-    ); // Exclude "admin" and IDs
+    );
 
   return (
     <header className="flex h-14 border-b shrink-0 items-center gap-2">

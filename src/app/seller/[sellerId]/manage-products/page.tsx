@@ -2,6 +2,8 @@ import React from "react";
 import db from "@/lib/db";
 import { ProductColumn } from "./_components/column";
 import ProductClient from "./_components/client";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const SellerProducts = async (props: {
   params: Promise<{
@@ -67,7 +69,14 @@ const SellerProducts = async (props: {
 
   return (
     <div>
-      <p className="font-semibold text-2xl">Product Dashboard</p>
+      <div className="flex items-center justify-between">
+        <p className="font-semibold text-2xl">Product Dashboard</p>
+        <Button>
+          <Link href={`/seller/${params.sellerId}/manage-products/create`}>
+            + Add Product
+          </Link>
+        </Button>
+      </div>
       <ProductClient data={formattedData} />
     </div>
   );

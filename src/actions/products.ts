@@ -98,12 +98,12 @@ export const createProduct = async (values: any, sellerId: string) => {
   try {
     // Destructure product data
     const {
-      name,
+      title,
       slug,
       description,
       tags,
       category,
-      images,
+      media,
       price,
       brand,
       materials,
@@ -117,7 +117,7 @@ export const createProduct = async (values: any, sellerId: string) => {
 
     // Check for an existing product with the same name and sellerId
     const existingProduct = await db.sellerProduct.findFirst({
-      where: { name, sellerId },
+      where: { name: title, sellerId },
     });
 
     if (existingProduct) {
@@ -127,12 +127,12 @@ export const createProduct = async (values: any, sellerId: string) => {
     // Create the main product
     const createdProduct = await db.sellerProduct.create({
       data: {
-        name,
+        name: title,
         slug,
         description,
         tags,
         category,
-        images,
+        images: media,
         price,
         brand,
         materials,
