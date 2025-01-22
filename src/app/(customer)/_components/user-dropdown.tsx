@@ -137,7 +137,7 @@ const UserDropdown = () => {
             className="w-8 h-8 rounded-full"
           />
           <div className="flex flex-col items-start">
-            <span className="text-sm m-0">Hello, Kyle Andre Lim</span>
+            <span className="text-sm m-0">Hello, Juan Dela Cruz</span>
             <span className="font-semibold text-sm m-0">Orders & Account</span>
           </div>
         </button>
@@ -188,7 +188,7 @@ const UserDropdown = () => {
                   className="w-10 h-10 rounded-full"
                 />
                 <div>
-                  <p className="font-semibold">Kyle Andre Lim</p>
+                  <p className="font-semibold">Juan Dela Cruz</p>
                 </div>
               </div>
               <ul className="p-4 space-y-2">
