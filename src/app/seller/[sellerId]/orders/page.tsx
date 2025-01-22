@@ -1,0 +1,9 @@
+
+import React from "react";
+import UnderConstruction from "@/components/globals/under-construction";
+
+const SellerOrder = () => {
+  return <UnderConstruction />;
+};
+
+export default SellerOrder;
