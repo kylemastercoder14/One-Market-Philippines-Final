@@ -7,6 +7,42 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String?
+  emailVerified DateTime?
+  image         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  account Account[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refreshToken      String? @db.Text
+  accessToken       String? @db.Text
+  expiresAt         Int?
+  tokenType         String?
+  scope             String?
+  idToken           String? @db.Text
+  sessionState      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([provider, providerAccountId])
+}
+
 model Seller {
   id                     String  @id @default(cuid())
   name                   String?
@@ -104,7 +140,7 @@ model SellerProductVariants {
   updatedAt DateTime @updatedAt
 
   sellerProductSlug String
-  sellerProduct   SellerProduct @relation(fields: [sellerProductSlug], references: [slug], onDelete: Cascade)
+  sellerProduct     SellerProduct @relation(fields: [sellerProductSlug], references: [slug], onDelete: Cascade)
 
   sellerProductVariantsOptions SellerProductVariantsOptions[]
 }
